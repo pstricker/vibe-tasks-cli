@@ -1,120 +1,285 @@
-# VibeTasks — Daily Task CLI
+# 🧭 Vibe Tasks CLI
 
-A fast, text-first .NET 8 CLI to track your day-to-day tasks, grouped by day in **one JSON file per day**. Supports quick add, status changes (`todo|inprogress|blocked|skipped|complete`), notes (inline or `$EDITOR`), tags, search (substring / regex / fuzzy), **auto roll-forward** of open tasks, and a **plain-text standup** generator.
+[![Build](https://github.com/pstricker/vibe-tasks-cli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/pstricker/vibe-tasks-cli/actions/workflows/dotnet.yml)
+![License](https://img.shields.io/github/license/pstricker/vibe-tasks-cli)
+![.NET](https://img.shields.io/badge/.NET-8.0-blue)
 
-## Install
+**Vibe Tasks CLI** is a fast, developer-friendly tool for tracking your daily tasks directly from the command line.  
+Each day’s work is stored in its own JSON file, incomplete tasks automatically roll forward, and you can instantly generate plain-text standup summaries.  
+It’s built for engineers who want a seamless, keyboard-first workflow without switching tools.
+
+---
+
+## ✨ Features
+
+- ✅ Add, update, remove, or archive tasks quickly  
+- 🌀 Automatic roll-forward of incomplete tasks  
+- 🏷️ Tag tasks with normalized lowercase tags  
+- 🧩 Task statuses: `todo`, `inprogress`, `complete`, `blocked`, `skipped`  
+- 📝 Inline or `--edit` multiline note editing  
+- 🔍 Search by substring, regex, fuzzy match, or tag  
+- 🧠 SQLite full-text index for cross-day search  
+- 🧾 “Yesterday / Today” standup summaries  
+- 💾 Optional Git auto-commit on every change  
+- 🎨 Colorized console output and `--json` for scripting  
+
+---
+
+## 🚀 Installation
+
+### 1. Clone and build
 
 ```bash
-# Restore & build
+git clone https://github.com/pstricker/vibe-tasks-cli.git
+cd vibe-tasks-cli
 dotnet build
-
-# Or publish single-file binaries (adjust RID)
-dotnet publish -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
 ```
 
-## NuGet packages
+### 2. Publish as a self-contained executable
 
-- Spectre.Console & Spectre.Console.Cli — rich console & CLI framework
-- FuzzySharp — fuzzy search
-- TextCopy — clipboard for standup (`--clipboard`)
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
+```
 
-## Usage
+If you’re on Intel-based macOS, use:
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
+```
 
-The executable name is `task` (via `dotnet run --project src/VibeTasks.Cli` or after publishing).
+For Windows or Linux:
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+dotnet publish src/VibeTasks.Cli -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
+```
 
-### Add & basic flow
+The resulting binary will be located in:
+```
+src/VibeTasks.Cli/bin/Release/net8.0/<runtime>/publish/task
+```
 
+Make it executable and move it to your PATH (macOS/Linux):
+```bash
+chmod +x src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish/task
+sudo mv src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish/task /usr/local/bin/task
+```
+
+Now you can run it from anywhere:
+```bash
+task --help
+```
+
+---
+
+## 🧭 Add to PATH manually (optional)
+
+If you prefer not to move it, add this line to your `~/.zshrc` or `~/.bash_profile`:
+
+```bash
+export PATH="$PATH:/Users/philstricker/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
+```
+
+Apply changes:
+```bash
+source ~/.zshrc
+```
+
+Confirm it’s available:
+```bash
+which task
+```
+
+---
+
+## 🧠 Usage Examples
+
+### Add a task
 ```bash
 task add "Investigate cache stampede" -t perf,infra --note "Repro in staging"
-task status 9xn2 inprogress
-task note 9xn2 --append "Checked connection pool"
-task list --open
-task rm 9xn2           # remove from *today* only
-task archive 9xn2      # stop rolling forward
 ```
 
-### Standup
+### Update task status
+```bash
+task status 1 inprogress
+task status 1 complete
+```
 
+### Edit or append notes
+```bash
+task note 1 --append "Checked connection pool"
+task note 1 --edit
+```
+
+### List tasks
+```bash
+task list              # today
+task list --open       # only incomplete tasks
+task list --json       # machine-readable
+```
+
+### Search tasks
+```bash
+task search "cache"          # substring
+task search "cache" --regex  # regex
+task search "cache" --fuzzy  # fuzzy
+task search -t perf          # by tag
+```
+
+### Generate standup summary
+```bash
+task standup
+```
+
+Example output:
 ```
 Yesterday:
-- Task 1
-- Task 2
+- Investigate cache stampede
 Today:
-- Task 3
-- Task 4
+- Improve connection pool retry
 ```
 
-Run:
+### Rebuild SQLite index
 ```bash
-task standup --date 2025-10-13 --clipboard
+task reindex
 ```
 
-### Search
+---
 
+## ⚙️ Configuration
+
+Settings are stored in:
+```
+~/.vibe-tasks/config.json
+```
+
+Show configuration:
 ```bash
-task search "cache" -t perf --from 2025-10-01 --to 2025-10-31
-task search "stampeed" --fuzzy
-task search "cache.*stampede" --regex
+task config --list
 ```
 
-### Config
-
-Config lives at `~/.vibe-tasks/config.json`
-
+Change configuration:
 ```bash
-task config                  # show full JSON
-task config --get dataDir
-task config --set dataDir=/path/to/dir
-task config --set gitAutoCommit=false
+task config --set UseSqliteIndex=true
+task config --set GitAutoCommit=false
+task config --set DataDir="/Users/philstricker/Projects/vibe-tasks-data"
 ```
 
-### Data format
+---
 
-`~/.vibe-tasks/YYYY-MM-DD.json`
+## 📁 Data Layout
 
-```json
-{
-  "date": "2025-10-12",
-  "timezone": "Pacific/Honolulu",
-  "tasks": [ { "id": "9xn2", "description": "…", "tags": ["perf"], "status": "inprogress", "note": "", "history": [] } ]
-}
+Default directory:
+```
+~/.vibe-tasks/
 ```
 
-### Roll-forward rules
+Typical contents:
+```
+├── 2025-10-12.json
+├── 2025-10-13.json
+├── vibetasks-index.sqlite
+└── config.json
+```
 
-- Triggered on first command of the day if today’s file doesn’t exist.
-- Carry tasks from the most recent prior day where `status != complete` and `archived == false`.
-- **Fallback:** if none match, include tasks **edited yesterday** (not archived), even if complete.
-- Preserves stable IDs and appends a `rollforward` history event.
+Each JSON file represents a single day’s work. Incomplete tasks automatically roll forward.  
+The SQLite index is used for fast global search.
 
-### Git auto-commit
-
-When enabled (`gitAutoCommit: true`), any write will run `git init`, `git add -A`, `git commit -m "…"`. Failures are ignored.
-
-## Statuses
-
-`todo | inprogress | blocked | skipped | complete`
-
-## Tests
-
+To customize the location:
 ```bash
+task config --set DataDir="/path/to/tasks"
+```
+
+---
+
+## 🧪 Development
+
+Build and test:
+```bash
+dotnet restore
+dotnet build
 dotnet test
 ```
 
-## Publish quickstart
-
+Run interactively:
 ```bash
-# macOS Apple Silicon
-dotnet publish src/VibeTasks.Cli -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
-# Linux x64
-dotnet publish src/VibeTasks.Cli -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
-# Windows x64
-dotnet publish src/VibeTasks.Cli -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+dotnet run --project src/VibeTasks.Cli -- --help
 ```
 
-## Roadmap ideas
+---
 
-- Move tasks between days explicitly (`task move <id> --to YYYY-MM-DD`)
-- Export/import NDJSON
-- Richer filtering & grouping in `list`
-- Optional SQLite index for faster cross-day searching
+## 🔧 Continuous Integration
+
+Add this GitHub Actions workflow at `.github/workflows/dotnet.yml`:
+
+```yaml
+name: .NET Build & Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+```
+
+This ensures all pushes and pull requests are automatically built and tested.
+
+---
+
+## 🧰 Tech Stack
+
+- [.NET 8](https://dotnet.microsoft.com/) — Runtime and SDK  
+- [Spectre.Console.Cli](https://spectreconsole.net/) — CLI framework  
+- [Microsoft.Data.Sqlite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/) — Full-text search index  
+- [System.Text.Json](https://learn.microsoft.com/en-us/dotnet/api/system.text.json) — Storage and serialization  
+- [xUnit](https://xunit.net/) — Unit testing  
+
+---
+
+## 🧾 License
+
+MIT © [Phil Stricker](https://github.com/pstricker)
+
+---
+
+## ✅ Repository Setup Checklist
+
+- [x] Add this `README.md`  
+- [x] Add an MIT `LICENSE` file  
+- [x] Enable GitHub Actions (see workflow above)  
+- [x] Add build & license badges (already included)  
+- [x] Tag your first release  
+  ```bash
+  git tag -a v1.0.0 -m "Initial release"
+  git push origin v1.0.0
+  ```
+- [x] (Optional) Add Homebrew tap for `brew install pstricker/vibe-tasks-cli`
+
+---
+
+## 🏁 Summary
+
+| Property | Description |
+|-----------|-------------|
+| **Project** | Vibe Tasks CLI |
+| **Purpose** | Daily task tracking & standup automation |
+| **Storage** | One JSON file per day, auto roll-forward |
+| **Indexing** | SQLite full-text search |
+| **Key Commands** | `add`, `status`, `note`, `list`, `search`, `standup`, `reindex`, `config` |
+| **Platform** | Cross-platform (.NET 8) |
+| **License** | MIT |
+| **Author** | [Phil Stricker](https://github.com/pstricker) |
+
+---
+
+> 🧩 **Vibe Tasks CLI** — a simple, scriptable, and lightning-fast daily workflow tracker for developers who live in the terminal.

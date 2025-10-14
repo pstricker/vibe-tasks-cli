@@ -54,13 +54,13 @@ dotnet publish src/VibeTasks.Cli -c Release -r linux-x64 --self-contained true /
 
 The resulting binary will be located in:
 ```
-src/VibeTasks.Cli/bin/Release/net8.0/<runtime>/publish/task
+src/VibeTasks.Cli/bin/Release/net8.0/<runtime>/
 ```
 
 Make it executable and move it to your PATH (macOS/Linux):
 ```bash
-chmod +x src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish/task
-sudo mv src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish/task /usr/local/bin/task
+chmod +x src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/
+sudo mv src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/ /usr/local/bin/task
 ```
 
 Now you can run it from anywhere:
@@ -75,7 +75,7 @@ task --help
 If you prefer not to move it, add this line to your `~/.zshrc` or `~/.bash_profile`:
 
 ```bash
-export PATH="$PATH:/Users/philstricker/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
+export PATH="$PATH:/Users/{user}/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
 ```
 
 Apply changes:
@@ -160,7 +160,7 @@ Change configuration:
 ```bash
 task config --set UseSqliteIndex=true
 task config --set GitAutoCommit=false
-task config --set DataDir="/Users/philstricker/Projects/vibe-tasks-data"
+task config --set DataDir="/Users/{user}/Projects/vibe-tasks-data"
 ```
 
 ---

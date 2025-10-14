@@ -1,0 +1,98 @@
+# Build artifacts
+bin/
+obj/
+out/
+publish/
+*.exe
+*.dll
+*.pdb
+*.log
+*.db
+*.sqlite
+*.db-shm
+*.db-wal
+
+# User-specific files
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.csproj.user
+*.sln.docstates
+*.DS_Store
+
+# Test results and coverage
+TestResult*/
+*.trx
+*.coverage
+*.coveragexml
+*.testlog
+
+# dotnet tools / caches
+/.vs/
+/.vsconfig
+/.vscode/
+/.ionide/
+*.nupkg
+*.snupkg
+*.nuget
+.nuget/
+*.lock.json
+artifacts/
+*.cache
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Logs
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Environment and secrets
+.env
+.env.*
+.envrc
+secrets.json
+appsettings.Development.json
+
+# Publish / distribution
+src/VibeTasks.Cli/bin/
+src/VibeTasks.Cli/obj/
+src/VibeTasks.Cli/bin/Release/
+src/VibeTasks.Cli/bin/Debug/
+tests/VibeTasks.Tests/bin/
+tests/VibeTasks.Tests/obj/
+
+# Local data and generated content
+.vibe-tasks/
+~/.vibe-tasks/
+data/
+*.json
+*.csv
+*.bak
+
+# macOS metadata
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+
+# JetBrains Rider
+.idea/
+*.iml
+
+# SQLite index and cache
+vibetasks-index.sqlite
+*.db-journal
+*.db-wal
+*.db-shm

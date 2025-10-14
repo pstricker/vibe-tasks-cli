@@ -23,7 +23,7 @@ public static class Program
             cfg.PropagateExceptions();
 
             cfg.AddCommand<AddCommand>("add").WithAlias("a");
-            cfg.AddCommand<RemoveCommand>("rm").WithAlias("del");
+            cfg.AddCommand<RemoveCommand>("remove").WithAlias("del");
             cfg.AddCommand<ArchiveCommand>("archive");
             cfg.AddCommand<StatusCommand>("status");
             cfg.AddCommand<NoteCommand>("note");
@@ -33,6 +33,7 @@ public static class Program
             cfg.AddCommand<EditCommand>("edit");
             cfg.AddCommand<ReopenCommand>("reopen");
             cfg.AddCommand<ConfigCommand>("config");
+            cfg.AddCommand<ReindexCommand>("reindex");
         });
 
         return app.Run(args);

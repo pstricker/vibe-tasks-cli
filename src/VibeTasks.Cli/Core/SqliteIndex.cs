@@ -114,16 +114,16 @@ public class SqliteIndex
         var parms = new Dictionary<string, object?>();
 
         if (from.HasValue) { clauses.Add("date >= $from"); parms["$from"] = from.Value.ToString("yyyy-MM-dd"); }
-        if (to.HasValue)   { clauses.Add("date <= $to");   parms["$to"]   = to.Value.ToString("yyyy-MM-dd"); }
+        if (to.HasValue) { clauses.Add("date <= $to"); parms["$to"] = to.Value.ToString("yyyy-MM-dd"); }
 
         if (statuses.Length > 0)
         {
             var inlist = string.Join(",", statuses.Select((s, i) => $"$st{i}"));
             clauses.Add($"status IN ({inlist})");
-            for (var i=0;i<statuses.Length;i++) parms[$"$st{i}"] = statuses[i];
+            for (var i = 0; i < statuses.Length; i++) parms[$"$st{i}"] = statuses[i];
         }
 
-        for (var i=0;i<tags.Length;i++)
+        for (var i = 0; i < tags.Length; i++)
         {
             clauses.Add($"(','||lower(tags)||',') LIKE $tg{i}");
             parms[$"$tg{i}"] = $"%,{tags[i].ToLowerInvariant()}%,";
@@ -143,20 +143,31 @@ public class SqliteIndex
         string sql;
         if (!string.IsNullOrWhiteSpace(query) && haveFts)
         {
-            sql = $"SELECT t.date,t.id,t.description,t.tags,t.status,t.archived " +
-                  $"FROM tasks t JOIN tasks_fts f ON f.id=t.id AND f.date=t.date " +
-                  $"WHERE f.description MATCH $q OR f.tags MATCH $q " + (where=="" ? "" : " AND " + string.Join(" AND ", clauses)) + // remove 'WHERE ' prefix once since we already added WHERE for FTS
-                  " ORDER BY t.date ASC, t.id ASC";
-            parms["$q"] = query;
+            // Prefix search by default
+            var q = query!.Replace("\"", "\"\"");
+            parms["$q"] = q + "*";
+
+            var extra = clauses.Count > 0 ? " AND " + string.Join(" AND ", clauses) : "";
+            sql =
+                "SELECT t.date,t.id,t.description,t.tags,t.status,t.archived " +
+                "FROM tasks t JOIN tasks_fts f ON f.id=t.id AND f.date=t.date " +
+                "WHERE f MATCH $q" + extra +
+                " ORDER BY t.date ASC, t.id ASC";
         }
         else if (!string.IsNullOrWhiteSpace(query))
         {
-            sql = $"SELECT date,id,description,tags,status,archived FROM tasks {where} " + (where=="" ? "WHERE " : " AND ") + " description LIKE $qlike " + " ORDER BY date ASC, id ASC";
+            sql =
+                $"SELECT date,id,description,tags,status,archived FROM tasks " +
+                (clauses.Count > 0 ? "WHERE " + string.Join(" AND ", clauses) + " AND " : "WHERE ") +
+                "description LIKE $qlike ORDER BY date ASC, id ASC";
             parms["$qlike"] = "%" + query + "%";
         }
         else
         {
-            sql = $"SELECT date,id,description,tags,status,archived FROM tasks {where} ORDER BY date ASC, id ASC";
+            sql =
+                $"SELECT date,id,description,tags,status,archived FROM tasks " +
+                (clauses.Count > 0 ? "WHERE " + string.Join(" AND ", clauses) : "") +
+                " ORDER BY date ASC, id ASC";
         }
 
         using var cmd = conn.CreateCommand();

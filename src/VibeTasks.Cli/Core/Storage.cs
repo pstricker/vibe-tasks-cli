@@ -1,5 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace VibeTasks.Core;
 
@@ -17,7 +19,10 @@ public class DataStore
     }
 
     public string GetDayPath(DateTime date) => Path.Combine(_cfg.DataDir, date.ToString("yyyy-MM-dd") + ".json");
-    public IEnumerable<string> EnumerateDayFiles() => Directory.EnumerateFiles(_cfg.DataDir, "*.json").OrderBy(x => x);
+    public IEnumerable<string> EnumerateDayFiles()
+    => Directory.EnumerateFiles(_cfg.DataDir, "*.json")
+        .Where(f => Regex.IsMatch(Path.GetFileName(f), @"^\d{4}-\d{2}-\d{2}\.json$"))
+        .OrderBy(x => x);
 
     public DayFile LoadDay(DateTime date)
     {
@@ -67,13 +72,17 @@ public class DataStore
     }
 
     public IEnumerable<DayFile> LoadAllDays()
+{
+    foreach (var file in EnumerateDayFiles())
     {
-        foreach (var file in EnumerateDayFiles())
+        var name = Path.GetFileNameWithoutExtension(file);
+        if (DateTime.TryParseExact(name, "yyyy-MM-dd",
+            CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
-            var date = DateTime.Parse(Path.GetFileNameWithoutExtension(file));
             yield return LoadDay(date);
         }
     }
+}
 }
 
 public class RollForwardService

@@ -95,6 +95,7 @@ task purge --backup --backup-dir ~/Desktop
 # Selective purges
 task purge --json-only
 task purge --sqlite-only
+```
 
 ---
 

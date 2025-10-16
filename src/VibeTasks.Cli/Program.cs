@@ -8,6 +8,31 @@ namespace VibeTasks;
 
 public static class Program
 {
+    public static void ConfigureCommands(IConfigurator cfg)
+    {
+        cfg.SetApplicationName("task");
+        cfg.PropagateExceptions();
+
+        cfg.AddCommand<AddCommand>("add").WithAlias("a");
+        cfg.AddCommand<RemoveCommand>("remove").WithAlias("del");
+        cfg.AddCommand<ArchiveCommand>("archive");
+        cfg.AddCommand<StatusCommand>("status");
+        cfg.AddCommand<NoteCommand>("note");
+        cfg.AddCommand<ListCommand>("list").WithAlias("ls");
+        cfg.AddCommand<SearchCommand>("search").WithAlias("s");
+        cfg.AddCommand<StandupCommand>("standup");
+        cfg.AddCommand<EditCommand>("edit");
+        cfg.AddCommand<ReopenCommand>("reopen");
+        cfg.AddCommand<ConfigCommand>("config");
+        cfg.AddCommand<ReindexCommand>("reindex");
+        cfg.AddCommand<PurgeCommand>("purge")
+           .WithDescription("Delete local task data (JSON and/or SQLite) with optional backup and confirmation.");
+        cfg.AddCommand<VibeTasks.Cli.Commands.ShellCommand>("shell")
+           .WithDescription("Start interactive shell mode.");
+        cfg.AddCommand<VibeTasks.Cli.Commands.ExitCommand>("exit")
+           .WithDescription("Exit shell mode.");
+    }
+
     public static int Main(string[] args)
     {
         var config = AppConfig.Load();
@@ -17,28 +42,18 @@ public static class Program
         var roller = new RollForwardService(store);
         roller.PerformIfNeeded();
 
-        var app = new CommandApp(new TypeRegistrar());
-        app.Configure(cfg =>
+        // Shell mode: if first arg is 'shell', run shell loop
+        if (args.Length > 0 && args[0].Equals("shell", StringComparison.OrdinalIgnoreCase))
         {
-            cfg.SetApplicationName("task");
-            cfg.PropagateExceptions();
-
-            cfg.AddCommand<AddCommand>("add").WithAlias("a");
-            cfg.AddCommand<RemoveCommand>("remove").WithAlias("del");
-            cfg.AddCommand<ArchiveCommand>("archive");
-            cfg.AddCommand<StatusCommand>("status");
-            cfg.AddCommand<NoteCommand>("note");
-            cfg.AddCommand<ListCommand>("list").WithAlias("ls");
-            cfg.AddCommand<SearchCommand>("search").WithAlias("s");
-            cfg.AddCommand<StandupCommand>("standup");
-            cfg.AddCommand<EditCommand>("edit");
-            cfg.AddCommand<ReopenCommand>("reopen");
-            cfg.AddCommand<ConfigCommand>("config");
-            cfg.AddCommand<ReindexCommand>("reindex");
-            cfg.AddCommand<PurgeCommand>("purge")
-               .WithDescription("Delete local task data (JSON and/or SQLite) with optional backup and confirmation.");
-        });
-
-        return app.Run(args);
+            var app = new CommandApp(new TypeRegistrar());
+            app.Configure(cfg => ConfigureCommands(cfg));
+            return app.Run(args); // ShellCommand handles the loop
+        }
+        else
+        {
+            var app = new CommandApp(new TypeRegistrar());
+            app.Configure(cfg => ConfigureCommands(cfg));
+            return app.Run(args);
+        }
     }
 }

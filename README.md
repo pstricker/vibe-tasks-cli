@@ -25,71 +25,6 @@ It’s built for engineers who want a seamless, keyboard-first workflow without 
 
 ---
 
-## 🚀 Installation
-
-### 1. Clone and build
-
-```bash
-git clone https://github.com/pstricker/vibe-tasks-cli.git
-cd vibe-tasks-cli
-dotnet build
-```
-
-### 2. Publish as a self-contained executable
-
-```bash
-dotnet publish src/VibeTasks.Cli -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
-```
-
-If you’re on Intel-based macOS, use:
-```bash
-dotnet publish src/VibeTasks.Cli -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
-```
-
-For Windows or Linux:
-```bash
-dotnet publish src/VibeTasks.Cli -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
-dotnet publish src/VibeTasks.Cli -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
-```
-
-The resulting binary will be located in:
-```
-src/VibeTasks.Cli/bin/Release/net8.0/<runtime>/
-```
-
-Make it executable and move it to your PATH (macOS/Linux):
-```bash
-chmod +x src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/
-sudo mv src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/ /usr/local/bin/task
-```
-
-Now you can run it from anywhere:
-```bash
-task --help
-```
-
----
-
-## 🧭 Add to PATH manually (optional)
-
-If you prefer not to move it, add this line to your `~/.zshrc` or `~/.bash_profile`:
-
-```bash
-export PATH="$PATH:/Users/{user}/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
-```
-
-Apply changes:
-```bash
-source ~/.zshrc
-```
-
-Confirm it’s available:
-```bash
-which task
-```
-
----
-
 ## 🧠 Usage Examples
 
 ### Add a task
@@ -160,6 +95,71 @@ task purge --backup --backup-dir ~/Desktop
 # Selective purges
 task purge --json-only
 task purge --sqlite-only
+
+---
+
+## 🚀 Installation
+
+### 1. Clone and build
+
+```bash
+git clone https://github.com/pstricker/vibe-tasks-cli.git
+cd vibe-tasks-cli
+dotnet build
+```
+
+### 2. Publish as a self-contained executable
+
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r osx-arm64 --self-contained true /p:PublishSingleFile=true
+```
+
+If you’re on Intel-based macOS, use:
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
+```
+
+For Windows or Linux:
+```bash
+dotnet publish src/VibeTasks.Cli -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+dotnet publish src/VibeTasks.Cli -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true
+```
+
+The resulting binary will be located in:
+```
+src/VibeTasks.Cli/bin/Release/net8.0/<runtime>/
+```
+
+Make it executable and move it to your PATH (macOS/Linux):
+```bash
+chmod +x src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/
+sudo mv src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/ /usr/local/bin/task
+```
+
+Now you can run it from anywhere:
+```bash
+task --help
+```
+
+---
+
+## 🧭 Add to PATH manually (optional)
+
+If you prefer not to move it, add this line to your `~/.zshrc` or `~/.bash_profile`:
+
+```bash
+export PATH="$PATH:/Users/{user}/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
+```
+
+Apply changes:
+```bash
+source ~/.zshrc
+```
+
+Confirm it’s available:
+```bash
+which task
+```
 
 ---
 

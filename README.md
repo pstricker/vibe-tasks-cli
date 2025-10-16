@@ -144,26 +144,6 @@ task --help
 
 ---
 
-## 🧭 Add to PATH manually (optional)
-
-If you prefer not to move it, add this line to your `~/.zshrc` or `~/.bash_profile`:
-
-```bash
-export PATH="$PATH:/Users/{user}/Projects/vibe-tasks-cli/src/VibeTasks.Cli/bin/Release/net8.0/osx-arm64/publish"
-```
-
-Apply changes:
-```bash
-source ~/.zshrc
-```
-
-Confirm it’s available:
-```bash
-which task
-```
-
----
-
 ## ⚙️ Configuration
 
 Settings are stored in:
@@ -226,36 +206,6 @@ dotnet run --project src/VibeTasks.Cli -- --help
 
 ---
 
-## 🔧 Continuous Integration
-
-Add this GitHub Actions workflow at `.github/workflows/dotnet.yml`:
-
-```yaml
-name: .NET Build & Test
-
-on: [push, pull_request]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-      - name: Restore
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-      - name: Test
-        run: dotnet test --no-build --verbosity normal
-```
-
-This ensures all pushes and pull requests are automatically built and tested.
-
----
-
 ## 🧰 Tech Stack
 
 - [.NET 8](https://dotnet.microsoft.com/) — Runtime and SDK  
@@ -269,21 +219,6 @@ This ensures all pushes and pull requests are automatically built and tested.
 ## 🧾 License
 
 MIT © [Phil Stricker](https://github.com/pstricker)
-
----
-
-## ✅ Repository Setup Checklist
-
-- [x] Add this `README.md`  
-- [x] Add an MIT `LICENSE` file  
-- [x] Enable GitHub Actions (see workflow above)  
-- [x] Add build & license badges (already included)  
-- [x] Tag your first release  
-  ```bash
-  git tag -a v1.0.0 -m "Initial release"
-  git push origin v1.0.0
-  ```
-- [x] (Optional) Add Homebrew tap for `brew install pstricker/vibe-tasks-cli`
 
 ---
 

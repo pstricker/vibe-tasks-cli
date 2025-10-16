@@ -1,6 +1,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
+using VibeTasks.Core;
 
 namespace VibeTasks.Cli.Commands;
 
@@ -11,14 +12,19 @@ public class ShellCommand : Command<ShellCommand.Settings>
     public override int Execute(CommandContext context, Settings settings)
     {
         AnsiConsole.MarkupLine("[green]Entering shell mode. Type commands or 'exit' to quit.[/]");
-        var history = new List<string>();
-        int historyIndex = -1;
+        var historyFile = GetHistoryFilePath();
+        var history = LoadHistory(historyFile, 25);
+        int historyIndex = history.Count;
         while (true)
         {
             string input = ReadLineWithHistory(history, ref historyIndex);
             if (string.IsNullOrWhiteSpace(input)) continue;
             if (input.Trim().ToLower() == "exit") break;
-            history.Add(input);
+            // Only add to history if not a duplicate of previous
+            if (history.Count == 0 || history[history.Count - 1] != input)
+            {
+                history.Add(input);
+            }
             historyIndex = history.Count;
             try
             {
@@ -33,8 +39,36 @@ public class ShellCommand : Command<ShellCommand.Settings>
                 AnsiConsole.MarkupLine($"[red]Error:[/] {ex.Message}");
             }
         }
+        SaveHistory(historyFile, history);
         AnsiConsole.MarkupLine("[red]Exiting shell mode.[/]");
         return 0;
+
+        // Get history file path (in AppConfig.DataDir)
+        static string GetHistoryFilePath()
+        {
+            var config = AppConfig.Load();
+            var dir = config.DataDir ?? AppConfig.GetDefaultDataDir();
+            Directory.CreateDirectory(dir);
+            return Path.Combine(dir, "shell-history.txt");
+        }
+
+        // Load last N lines from history file
+        static List<string> LoadHistory(string filePath, int maxLines)
+        {
+            if (!File.Exists(filePath)) return new List<string>();
+            var lines = File.ReadAllLines(filePath);
+            return lines.Reverse().Take(maxLines).Reverse().ToList();
+        }
+
+        // Save all history to file
+        static void SaveHistory(string filePath, List<string> history)
+        {
+            try
+            {
+                File.WriteAllLines(filePath, history);
+            }
+            catch { /* ignore errors */ }
+        }
 
         // Custom input loop supporting history navigation
         static string ReadLineWithHistory(List<string> history, ref int historyIndex)

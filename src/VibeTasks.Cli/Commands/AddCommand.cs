@@ -1,7 +1,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Commands;
 
@@ -35,7 +35,7 @@ public sealed class AddCommand : Command<AddCommand.Settings>
             UpdatedAt = DateTimeOffset.Now,
             FirstDate = date,
             LastDate = date,
-            Status = TaskStatus.todo
+            Status = VibeTaskStatus.todo
         };
         item.History.Add(new TaskHistoryEvent { Ts = DateTimeOffset.Now, Op = "add" });
         df.Tasks.Add(item);

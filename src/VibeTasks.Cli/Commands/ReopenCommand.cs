@@ -1,7 +1,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Commands;
 
@@ -21,7 +21,7 @@ public sealed class ReopenCommand : Command<ReopenCommand.Settings>
         var t = df.Tasks.FirstOrDefault(x => x.Id.Equals(s.Id, StringComparison.OrdinalIgnoreCase));
         if (t is null) { AnsiConsole.MarkupLine($"[yellow]Not found:[/] {s.Id}"); return 1; }
         var old = t.Status;
-        t.Status = TaskStatus.todo;
+        t.Status = VibeTaskStatus.todo;
         t.UpdatedAt = DateTimeOffset.Now;
         t.CompletedDate = null;
         t.History.Add(new TaskHistoryEvent { Ts = DateTimeOffset.Now, Op = "reopen", From = old.ToString(), To = t.Status.ToString() });

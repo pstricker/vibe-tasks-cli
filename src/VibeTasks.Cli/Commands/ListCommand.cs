@@ -2,7 +2,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Text.Json;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Commands;
 
@@ -43,8 +43,8 @@ public sealed class ListCommand : Command<ListCommand.Settings>
         }
         if (!s.All)
         {
-            if (s.Open) items = items.Where(t => t.Status != TaskStatus.complete);
-            else if (s.Done) items = items.Where(t => t.Status == TaskStatus.complete);
+            if (s.Open) items = items.Where(t => t.Status != VibeTaskStatus.complete);
+            else if (s.Done) items = items.Where(t => t.Status == VibeTaskStatus.complete);
         }
 
         if (s.AsJson)
@@ -59,11 +59,11 @@ public sealed class ListCommand : Command<ListCommand.Settings>
         {
             var statusColor = t.Status switch
             {
-                TaskStatus.todo => "yellow",
-                TaskStatus.inprogress => "cyan",
-                TaskStatus.blocked => "red",
-                TaskStatus.skipped => "grey",
-                TaskStatus.complete => "green",
+                VibeTaskStatus.todo => "yellow",
+                VibeTaskStatus.inprogress => "cyan",
+                VibeTaskStatus.blocked => "red",
+                VibeTaskStatus.skipped => "grey",
+                VibeTaskStatus.complete => "green",
                 _ => "white"
             };
             table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x=>$"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : (t.Note.Length>60 ? t.Note.Substring(0, 60)+"..." : t.Note));

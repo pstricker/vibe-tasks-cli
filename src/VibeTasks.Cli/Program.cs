@@ -2,6 +2,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using VibeTasks.Core;
 using VibeTasks.Commands;
+using VibeTasks.Cli.Commands;
 
 namespace VibeTasks;
 
@@ -34,6 +35,8 @@ public static class Program
             cfg.AddCommand<ReopenCommand>("reopen");
             cfg.AddCommand<ConfigCommand>("config");
             cfg.AddCommand<ReindexCommand>("reindex");
+            cfg.AddCommand<PurgeCommand>("purge")
+               .WithDescription("Delete local task data (JSON and/or SQLite) with optional backup and confirmation.");
         });
 
         return app.Run(args);

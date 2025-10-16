@@ -2,7 +2,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Text.Json;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Commands;
 
@@ -26,13 +26,13 @@ public sealed class SearchCommand : Command<SearchCommand.Settings>
     public override int Execute(CommandContext context, Settings s)
     {
         var tags = s.Tags is null ? Array.Empty<string>() : Utils.NormalizeTags(s.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries));
-        TaskStatus[]? statuses = null;
+        VibeTaskStatus[]? statuses = null;
         if (!string.IsNullOrWhiteSpace(s.Status))
         {
             var parts = s.Status.Split(',', StringSplitOptions.RemoveEmptyEntries);
-            var list = new List<TaskStatus>();
+            var list = new List<VibeTaskStatus>();
             foreach (var p in parts)
-                if (Enum.TryParse<TaskStatus>(p, true, out var st)) list.Add(st);
+                if (Enum.TryParse<VibeTaskStatus>(p, true, out var st)) list.Add(st);
             statuses = list.ToArray();
         }
         DateTime? from = string.IsNullOrWhiteSpace(s.From) ? null : DateTime.Parse(s.From).Date;
@@ -51,10 +51,10 @@ public sealed class SearchCommand : Command<SearchCommand.Settings>
         var table = new Table().Border(TableBorder.Rounded).AddColumns("Date", "ID", "Status", "Description", "Tags");
         foreach (var (date, task) in results)
         {
-            var statusColor = task.Status == TaskStatus.complete ? "green" :
-                              task.Status == TaskStatus.blocked ? "red" :
-                              task.Status == TaskStatus.inprogress ? "cyan" :
-                              task.Status == TaskStatus.skipped ? "grey" : "yellow";
+            var statusColor = task.Status == VibeTaskStatus.complete ? "green" :
+                              task.Status == VibeTaskStatus.blocked ? "red" :
+                              task.Status == VibeTaskStatus.inprogress ? "cyan" :
+                              task.Status == VibeTaskStatus.skipped ? "grey" : "yellow";
             table.AddRow(date.ToString("yyyy-MM-dd"), $"[bold]{task.Id}[/]", $"[{statusColor}]{task.Status}[/]", task.Description, string.Join(", ", task.Tags.Select(x=>$"#{x}")));
         }
         AnsiConsole.Write(table);

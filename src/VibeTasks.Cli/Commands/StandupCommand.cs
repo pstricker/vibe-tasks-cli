@@ -1,7 +1,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Commands;
 
@@ -27,7 +27,7 @@ public sealed class StandupCommand : Command<StandupCommand.Settings>
         var yesterdayItems = yestDf.Tasks.Where(t => t.History.Any(h =>
             h.Ts.Date == yesterday && (h.Op == "add" || h.Op == "status" || h.Op == "note" || h.Op == "edit" || h.Op == "archive"))).ToList();
 
-        var todayOpen = todayDf.Tasks.Where(t => t.Status != TaskStatus.complete).ToList();
+        var todayOpen = todayDf.Tasks.Where(t => t.Status != VibeTaskStatus.complete).ToList();
 
         var lines = new List<string> { "Yesterday:" };
         lines.AddRange(!yesterdayItems.Any() ? new[]{ "- (none)" } : yesterdayItems.Select(t => "- " + t.Description));

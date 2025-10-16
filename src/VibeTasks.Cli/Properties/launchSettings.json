@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "VibeTasks.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "search -t perf"
+    }
+  }
+}

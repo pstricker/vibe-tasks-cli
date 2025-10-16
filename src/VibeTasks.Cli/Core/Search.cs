@@ -15,7 +15,7 @@ public class SearchService
         _index = new SqliteIndex(cfg);
     }
 
-    public IEnumerable<(DateTime date, TaskItem task)> Search(string? query, bool regex, bool fuzzy, string[] tags, TaskStatus[]? statusFilter, DateTime? from, DateTime? to)
+    public IEnumerable<(DateTime date, TaskItem task)> Search(string? query, bool regex, bool fuzzy, string[] tags, VibeTaskStatus[]? statusFilter, DateTime? from, DateTime? to)
     {
         // If SQLite index enabled and not using regex/fuzzy, use SQL for speed.
         if (_cfg.UseSqliteIndex && !regex && !fuzzy)
@@ -28,7 +28,7 @@ public class SearchService
                     Id = row.id,
                     Description = row.description,
                     Tags = row.tagsCsv.Split(',', StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).ToList(),
-                    Status = Enum.TryParse<TaskStatus>(row.status, out var st) ? st : TaskStatus.todo,
+                    Status = Enum.TryParse<VibeTaskStatus>(row.status, out var st) ? st : VibeTaskStatus.todo,
                     Archived = row.archived == 1
                 };
                 yield return (row.date, task);

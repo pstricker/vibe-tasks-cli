@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace VibeTasks.Core;
 
-public enum TaskStatus { todo, inprogress, blocked, skipped, complete }
+public enum VibeTaskStatus { todo, inprogress, blocked, skipped, complete }
 
 public class TaskHistoryEvent
 {
@@ -19,7 +19,7 @@ public class TaskItem
     public string Description { get; set; } = "";
     public List<string> Tags { get; set; } = new();
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public TaskStatus Status { get; set; } = TaskStatus.todo;
+    public VibeTaskStatus Status { get; set; } = VibeTaskStatus.todo;
     public string Note { get; set; } = "";
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;

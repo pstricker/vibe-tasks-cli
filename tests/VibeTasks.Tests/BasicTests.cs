@@ -1,7 +1,7 @@
 using Xunit;
 using System.IO;
 using VibeTasks.Core;
-using TaskStatus = VibeTasks.Core.TaskStatus;
+using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
 namespace VibeTasks.Tests;
 
@@ -36,7 +36,7 @@ public class BasicTests
 
         var yesterday = DateTime.Now.Date.AddDays(-1);
         var ydf = new DayFile { Date = yesterday.ToString("yyyy-MM-dd"), Timezone = cfg.Timezone, Tasks = new() };
-        ydf.Tasks.Add(new TaskItem { Id = "x1", Description = "Carry me", Status = TaskStatus.inprogress, FirstDate = yesterday, LastDate = yesterday });
+        ydf.Tasks.Add(new TaskItem { Id = "x1", Description = "Carry me", Status = VibeTaskStatus.inprogress, FirstDate = yesterday, LastDate = yesterday });
         store.SaveDay(ydf, "prepare yesterday");
 
         var roller = new RollForwardService(store);

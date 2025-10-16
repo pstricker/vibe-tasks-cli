@@ -29,7 +29,7 @@ public class StandupCommandTests
         var cfg = new AppConfig { DataDir = tmp, GitAutoCommit = false };
         var store = new DataStore(cfg);
         var today = store.LoadOrCreateToday();
-        today.Tasks.Add(new TaskItem { Id = "s1", Description = "Standup task", Status = VibeTasks.Core.TaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
+        today.Tasks.Add(new TaskItem { Id = "s1", Description = "Standup task", Status = VibeTasks.Core.VibeTaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
         store.SaveDay(today, "add for standup");
         var cmd = new StandupCommand(store);
         var settings = new StandupCommand.Settings { Date = DateTime.Today.ToString("yyyy-MM-dd") };

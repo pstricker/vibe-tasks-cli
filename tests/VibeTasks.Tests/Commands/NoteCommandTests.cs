@@ -29,7 +29,7 @@ public class NoteCommandTests
         var cfg = new AppConfig { DataDir = tmp, GitAutoCommit = false };
         var store = new DataStore(cfg);
         var today = store.LoadOrCreateToday();
-        today.Tasks.Add(new TaskItem { Id = "n1", Description = "Note me", Status = VibeTasks.Core.TaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
+        today.Tasks.Add(new TaskItem { Id = "n1", Description = "Note me", Status = VibeTasks.Core.VibeTaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
         store.SaveDay(today, "add for note");
         var cmd = new NoteCommand(store);
         var settings = new NoteCommand.Settings { Id = "n1", Set = "This is a note" };

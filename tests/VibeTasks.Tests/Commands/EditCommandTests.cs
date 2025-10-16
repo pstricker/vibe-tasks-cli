@@ -29,7 +29,7 @@ public class EditCommandTests
         var cfg = new AppConfig { DataDir = tmp, GitAutoCommit = false };
         var store = new DataStore(cfg);
         var today = store.LoadOrCreateToday();
-        today.Tasks.Add(new TaskItem { Id = "e1", Description = "Edit me", Tags = new() { "tag1" }, Status = VibeTasks.Core.TaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
+        today.Tasks.Add(new TaskItem { Id = "e1", Description = "Edit me", Tags = new() { "tag1" }, Status = VibeTasks.Core.VibeTaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
         store.SaveDay(today, "add for edit");
         var cmd = new EditCommand(store);
         var settings = new EditCommand.Settings { Id = "e1", Description = "Edited desc", AddTag = "tag2" };

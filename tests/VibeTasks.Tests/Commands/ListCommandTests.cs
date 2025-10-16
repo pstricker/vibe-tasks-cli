@@ -29,7 +29,7 @@ public class ListCommandTests
         var cfg = new AppConfig { DataDir = tmp, GitAutoCommit = false };
         var store = new DataStore(cfg);
         var today = store.LoadOrCreateToday();
-        today.Tasks.Add(new TaskItem { Id = "t1", Description = "List me", Tags = new() { "tag1" }, Status = VibeTasks.Core.TaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
+        today.Tasks.Add(new TaskItem { Id = "t1", Description = "List me", Tags = new() { "tag1" }, Status = VibeTasks.Core.VibeTaskStatus.todo, FirstDate = DateTime.Today, LastDate = DateTime.Today });
         store.SaveDay(today, "add for list");
         var cmd = new ListCommand(store);
         var settings = new ListCommand.Settings { Day = "today", Tag = "tag1" };

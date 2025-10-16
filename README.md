@@ -142,6 +142,25 @@ Today:
 task reindex
 ```
 
+### Purge local data
+
+Danger zone: permanently delete local task data in your DataDir (default `~/.vibe-tasks/`).
+
+```bash
+# Interactive confirmation
+task purge
+
+# Non-interactive (CI/scripting)
+task purge -y
+
+# Create a backup ZIP before deletion (DataDir/backups by default)
+task purge --backup
+task purge --backup --backup-dir ~/Desktop
+
+# Selective purges
+task purge --json-only
+task purge --sqlite-only
+
 ---
 
 ## ⚙️ Configuration

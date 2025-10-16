@@ -105,7 +105,7 @@ public class RollForwardService
             return;
         }
 
-        var carry = prevDay.Tasks.Where(t => !t.Archived && t.Status != TaskStatus.complete).ToList();
+        var carry = prevDay.Tasks.Where(t => !t.Archived && t.Status != VibeTaskStatus.complete).ToList();
 
         if (carry.Count == 0)
         {

@@ -1,11 +1,8 @@
-using Xunit;
-using VibeTasks.Core;
-using VibeTasks.Commands;
 using Spectre.Console.Cli;
-using System.IO;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using VibeTasks.Commands;
+using VibeTasks.Core;
+using Xunit;
 
 namespace VibeTasks.Tests.Commands;
 

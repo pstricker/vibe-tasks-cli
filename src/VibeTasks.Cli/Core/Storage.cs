@@ -1,7 +1,7 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using System.Globalization;
 
 namespace VibeTasks.Core;
 
@@ -72,17 +72,17 @@ public class DataStore
     }
 
     public IEnumerable<DayFile> LoadAllDays()
-{
-    foreach (var file in EnumerateDayFiles())
     {
-        var name = Path.GetFileNameWithoutExtension(file);
-        if (DateTime.TryParseExact(name, "yyyy-MM-dd",
-            CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+        foreach (var file in EnumerateDayFiles())
         {
-            yield return LoadDay(date);
+            var name = Path.GetFileNameWithoutExtension(file);
+            if (DateTime.TryParseExact(name, "yyyy-MM-dd",
+                CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+            {
+                yield return LoadDay(date);
+            }
         }
     }
-}
 }
 
 

@@ -1,6 +1,5 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.ComponentModel;
 using VibeTasks.Core;
 
 namespace VibeTasks.Cli.Commands;

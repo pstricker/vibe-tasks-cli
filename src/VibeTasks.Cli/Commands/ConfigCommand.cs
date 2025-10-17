@@ -47,7 +47,7 @@ public sealed class ConfigCommand : Command<ConfigCommand.Settings>
             return 0;
         }
 
-        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(_cfg, new System.Text.Json.JsonSerializerOptions{ WriteIndented=true }));
+        Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(_cfg, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
         return 0;
     }
 }

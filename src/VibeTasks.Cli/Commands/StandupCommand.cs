@@ -30,9 +30,9 @@ public sealed class StandupCommand : Command<StandupCommand.Settings>
         var todayOpen = todayDf.Tasks.Where(t => t.Status != VibeTaskStatus.complete).ToList();
 
         var lines = new List<string> { "Yesterday:" };
-        lines.AddRange(!yesterdayItems.Any() ? new[]{ "- (none)" } : yesterdayItems.Select(t => "- " + t.Description));
+        lines.AddRange(!yesterdayItems.Any() ? new[] { "- (none)" } : yesterdayItems.Select(t => "- " + t.Description));
         lines.Add("Today:");
-        lines.AddRange(todayOpen.Count == 0 ? new[]{ "- (none)" } : todayOpen.Select(t => "- " + t.Description));
+        lines.AddRange(todayOpen.Count == 0 ? new[] { "- (none)" } : todayOpen.Select(t => "- " + t.Description));
         var text = string.Join(Environment.NewLine, lines);
         Console.WriteLine(text);
 

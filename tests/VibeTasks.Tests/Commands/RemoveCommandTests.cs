@@ -1,8 +1,4 @@
 using Xunit;
-using VibeTasks.Core;
-using VibeTasks.Commands;
-using Spectre.Console.Cli;
-using System.IO;
 
 namespace VibeTasks.Tests.Commands;
 

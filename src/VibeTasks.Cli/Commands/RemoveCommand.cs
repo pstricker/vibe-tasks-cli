@@ -21,7 +21,7 @@ public sealed class RemoveCommand : Command<RemoveCommand.Settings>
         if (idx < 0) { AnsiConsole.MarkupLine($"[yellow]Not found:[/] {s.Id}"); return 1; }
         var t = df.Tasks[idx];
         df.Tasks.RemoveAt(idx);
-        t.History.Add(new TaskHistoryEvent{ Ts = DateTimeOffset.Now, Op = "remove" });
+        t.History.Add(new TaskHistoryEvent { Ts = DateTimeOffset.Now, Op = "remove" });
         _store.SaveDay(df, $"remove {t.Id}");
         AnsiConsole.MarkupLine($"[red]Removed[/] {t.Id}: {t.Description} (from today only)");
         return 0;

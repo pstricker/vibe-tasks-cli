@@ -25,12 +25,12 @@ public sealed class EditCommand : Command<EditCommand.Settings>
         if (!string.IsNullOrWhiteSpace(s.Description)) t.Description = s.Description;
         if (!string.IsNullOrWhiteSpace(s.AddTag))
         {
-            var tags = Utils.NormalizeTags(new[]{ s.AddTag });
+            var tags = Utils.NormalizeTags(new[] { s.AddTag });
             foreach (var tg in tags) if (!t.Tags.Contains(tg)) t.Tags.Add(tg);
         }
         if (!string.IsNullOrWhiteSpace(s.RemoveTag))
         {
-            var tags = Utils.NormalizeTags(new[]{ s.RemoveTag });
+            var tags = Utils.NormalizeTags(new[] { s.RemoveTag });
             t.Tags.RemoveAll(x => tags.Contains(x));
         }
         t.UpdatedAt = DateTimeOffset.Now;

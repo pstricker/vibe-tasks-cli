@@ -21,7 +21,7 @@ public sealed class ArchiveCommand : Command<ArchiveCommand.Settings>
         if (t is null) { AnsiConsole.MarkupLine($"[yellow]Not found:[/] {s.Id}"); return 1; }
         t.Archived = true;
         t.UpdatedAt = DateTimeOffset.Now;
-        t.History.Add(new TaskHistoryEvent{ Ts = DateTimeOffset.Now, Op = "archive" });
+        t.History.Add(new TaskHistoryEvent { Ts = DateTimeOffset.Now, Op = "archive" });
         _store.SaveDay(df, $"archive {t.Id}");
         AnsiConsole.MarkupLine($"[blue]Archived[/] {t.Id}: {t.Description}");
         return 0;

@@ -1,6 +1,5 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Text.Json;
 using VibeTasks.Core;
 using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
@@ -55,7 +54,7 @@ public sealed class SearchCommand : Command<SearchCommand.Settings>
                               task.Status == VibeTaskStatus.blocked ? "red" :
                               task.Status == VibeTaskStatus.inprogress ? "cyan" :
                               task.Status == VibeTaskStatus.skipped ? "grey" : "yellow";
-            table.AddRow(date.ToString("yyyy-MM-dd"), $"[bold]{task.Id}[/]", $"[{statusColor}]{task.Status}[/]", task.Description, string.Join(", ", task.Tags.Select(x=>$"#{x}")));
+            table.AddRow(date.ToString("yyyy-MM-dd"), $"[bold]{task.Id}[/]", $"[{statusColor}]{task.Status}[/]", task.Description, string.Join(", ", task.Tags.Select(x => $"#{x}")));
         }
         AnsiConsole.Write(table);
         return 0;

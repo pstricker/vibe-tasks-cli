@@ -1,6 +1,5 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
-using System.Text.Json;
 using VibeTasks.Core;
 using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
 
@@ -66,7 +65,7 @@ public sealed class ListCommand : Command<ListCommand.Settings>
                 VibeTaskStatus.complete => "green",
                 _ => "white"
             };
-            table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x=>$"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note);
+            table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x => $"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note);
         }
         AnsiConsole.Write(table);
         return 0;

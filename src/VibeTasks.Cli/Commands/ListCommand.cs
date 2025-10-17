@@ -66,7 +66,7 @@ public sealed class ListCommand : Command<ListCommand.Settings>
                 VibeTaskStatus.complete => "green",
                 _ => "white"
             };
-            table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x=>$"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : (t.Note.Length>60 ? t.Note.Substring(0, 60)+"..." : t.Note));
+            table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x=>$"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note);
         }
         AnsiConsole.Write(table);
         return 0;

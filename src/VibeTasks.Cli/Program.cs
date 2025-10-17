@@ -3,6 +3,7 @@ using Spectre.Console.Cli;
 using VibeTasks.Core;
 using VibeTasks.Commands;
 using VibeTasks.Cli.Commands;
+using VibeTasks.Cli.Services;
 
 namespace VibeTasks;
 

@@ -2,6 +2,7 @@ using Xunit;
 using System.IO;
 using VibeTasks.Core;
 using VibeTaskStatus = VibeTasks.Core.VibeTaskStatus;
+using VibeTasks.Cli.Services;
 
 namespace VibeTasks.Tests;
 

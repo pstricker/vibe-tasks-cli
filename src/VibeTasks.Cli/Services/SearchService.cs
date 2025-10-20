@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
+using VibeTasks.Core;
 
-namespace VibeTasks.Core;
+namespace VibeTasks.Services;
 
 public class SearchService
 {

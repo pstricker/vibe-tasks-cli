@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 using VibeTasks.Cli.Services;
 using VibeTasks.Core;
+using VibeTasks.Services;
 
 namespace VibeTasks;
 

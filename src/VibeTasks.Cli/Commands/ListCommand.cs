@@ -18,6 +18,7 @@ public sealed class ListCommand : Command<ListCommand.Settings>
         [CommandOption("--all")] public bool All { get; set; }
         [CommandOption("-t|--tag")] public string? Tag { get; set; }
         [CommandOption("--json")] public bool AsJson { get; set; }
+        [CommandOption("--showdates")] public bool ShowDates { get; set; }
     }
 
     public override int Execute(CommandContext context, Settings s)
@@ -53,7 +54,18 @@ public sealed class ListCommand : Command<ListCommand.Settings>
             return 0;
         }
 
-        var table = new Table().Border(TableBorder.Rounded).AddColumns("ID", "Status", "Description", "Tags", "Note");
+        Table table;
+        if (s.ShowDates)
+        {
+            table = new Table().Border(TableBorder.Rounded)
+                .AddColumns("ID", "Status", "Description", "Tags", "Note", "Date", "UpdatedAt");
+        }
+        else
+        {
+            table = new Table().Border(TableBorder.Rounded)
+                .AddColumns("ID", "Status", "Description", "Tags", "Note");
+        }
+
         foreach (var t in items.OrderBy(x => x.CreatedAt))
         {
             var statusColor = t.Status switch
@@ -65,7 +77,28 @@ public sealed class ListCommand : Command<ListCommand.Settings>
                 VibeTaskStatus.complete => "green",
                 _ => "white"
             };
-            table.AddRow($"[bold]{t.Id}[/]", $"[{statusColor}]{t.Status}[/]", t.Description, string.Join(", ", t.Tags.Select(x => $"#{x}")), string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note);
+            if (s.ShowDates)
+            {
+                table.AddRow(
+                    $"[bold]{t.Id}[/]",
+                    $"[{statusColor}]{t.Status}[/]",
+                    t.Description,
+                    string.Join(", ", t.Tags.Select(x => $"#{x}")),
+                    string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note,
+                    t.CreatedAt.ToString("yyyy-MM-dd"),
+                    t.UpdatedAt.ToString("yyyy-MM-dd HH:mm")
+                );
+            }
+            else
+            {
+                table.AddRow(
+                    $"[bold]{t.Id}[/]",
+                    $"[{statusColor}]{t.Status}[/]",
+                    t.Description,
+                    string.Join(", ", t.Tags.Select(x => $"#{x}")),
+                    string.IsNullOrWhiteSpace(t.Note) ? "-" : t.Note
+                );
+            }
         }
         AnsiConsole.Write(table);
         return 0;

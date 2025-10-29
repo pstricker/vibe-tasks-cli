@@ -13,19 +13,42 @@ public static class Program
         cfg.SetApplicationName("task");
         cfg.PropagateExceptions();
 
-        cfg.AddCommand<AddCommand>("add").WithAlias("a");
-        cfg.AddCommand<RemoveCommand>("remove").WithAlias("del");
-        cfg.AddCommand<ArchiveCommand>("archive");
-        cfg.AddCommand<StatusCommand>("status");
-        cfg.AddCommand<NoteCommand>("note");
-        cfg.AddCommand<ListCommand>("list").WithAlias("ls");
-        cfg.AddCommand<SearchCommand>("search").WithAlias("s");
-        cfg.AddCommand<StandupCommand>("standup");
-        cfg.AddCommand<EditCommand>("edit");
-        cfg.AddCommand<ReopenCommand>("reopen");
-        cfg.AddCommand<ConfigCommand>("config");
-        cfg.AddCommand<ReindexCommand>("reindex");
-        cfg.AddCommand<PurgeCommand>("purge")
+        cfg.AddCommand<AddCommand>("add")
+           .WithAlias("a")
+           .WithDescription("Add a new task.");
+        cfg.AddCommand<RemoveCommand>("remove")
+           .WithAlias("del")
+           .WithDescription("Remove an existing task.");
+        cfg.AddCommand<ArchiveCommand>("archive")
+           .WithDescription("Archive completed or old tasks.");
+        cfg.AddCommand<StatusCommand>("status")
+           .WithAlias("st")
+           .WithDescription("Show the status of a task.");
+        cfg.AddCommand<NoteCommand>("note")
+           .WithAlias("n")
+           .WithDescription("Add or view notes for a task.");
+        cfg.AddCommand<ListCommand>("list")
+           .WithAlias("ls")
+           .WithDescription("List all tasks.");
+        cfg.AddCommand<SearchCommand>("search")
+           .WithAlias("s")
+           .WithDescription("Search for tasks by keyword.");
+        cfg.AddCommand<StandupCommand>("standup")
+           .WithAlias("su")
+           .WithDescription("Show standup summary of tasks.");
+        cfg.AddCommand<EditCommand>("edit")
+           .WithAlias("e")
+           .WithDescription("Edit an existing task.");
+        cfg.AddCommand<ReopenCommand>("reopen")
+           .WithAlias("ro")
+           .WithDescription("Reopen an archived or completed task.");
+        cfg.AddCommand<ConfigCommand>("config")
+           .WithAlias("c")
+           .WithDescription("Configure application settings.");
+        cfg.AddCommand<ReindexCommand>("reindex")
+           .WithAlias("ri")
+           .WithDescription("Reindex the task database.");
+        cfg.AddCommand<PurgeCommand>("purge").WithAlias("p")
            .WithDescription("Delete local task data (JSON and/or SQLite) with optional backup and confirmation.");
         cfg.AddCommand<VibeTasks.Cli.Commands.ShellCommand>("shell")
            .WithDescription("Start interactive shell mode.");

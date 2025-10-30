@@ -1,4 +1,4 @@
-using Spectre.Console.Cli;
+﻿using Spectre.Console.Cli;
 using VibeTasks.Cli.Commands;
 using VibeTasks.Cli.Services;
 using VibeTasks.Commands;
@@ -68,6 +68,7 @@ public static class Program
         // Shell mode: if first arg is 'shell', run shell loop
         if (args.Length > 0 && args[0].Equals("shell", StringComparison.OrdinalIgnoreCase))
         {
+            ShowAsciiArt();
             var app = new CommandApp(new TypeRegistrar());
             app.Configure(cfg => ConfigureCommands(cfg));
             return app.Run(args); // ShellCommand handles the loop
@@ -78,5 +79,19 @@ public static class Program
             app.Configure(cfg => ConfigureCommands(cfg));
             return app.Run(args);
         }
+    }
+
+    private static void ShowAsciiArt()
+    {
+        var art = @"
+   _    ___ __       ______           __       
+  | |  / (_) /_  ___/_  __/___ ______/ /_______
+  | | / / / __ \/ _ \/ / / __ `/ ___/ //_/ ___/
+  | |/ / / /_/ /  __/ / / /_/ (__  ) ,< (__  ) 
+  |___/_/_.___/\___/_/  \__,_/____/_/|_/____/
+
+";
+
+        Spectre.Console.AnsiConsole.Write(new Spectre.Console.Markup($"[green]{art}[/]\n"));
     }
 }
